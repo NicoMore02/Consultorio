@@ -1,0 +1,121 @@
+@model ViewModels.AsistenciaDiaViewModel
+@using System.Globalization
+@{
+    ViewData["Title"] = "Asistencia";
+    var ar = new CultureInfo("es-AR");
+}
+
+<div class="dashboard-page">
+    <div class="page-heading">
+        <h1>
+            Asistencia del @Model.Fecha.ToString("dd/MM/yyyy")
+        </h1>
+        <span class="weekday-badge text-capitalize">
+            @Model.Fecha.ToString("dddd", ar)
+        </span>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card dashboard-card h-100">
+                <div class="card-header">
+                    <h2 class="card-title m-0">
+                        Alumnos
+                    </h2>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th class="ps-3">Alumno</th>
+                                    <th>Día y horario</th>
+                                    <th class="text-center">Asistencia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @if (Model.Pacientes.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="3" class="py-4 text-center text-muted">Todavía no hay pacientes registrados.</td>
+                                </tr>
+                            }
+                            @foreach (var p in Model.Pacientes)
+                            {
+                                <tr>
+                                    <td class="ps-3">@p.Nombre</td>
+                                    <td>
+                                        <span class="schedule-badge">@p.Horario</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <form asp-action="RegistrarAsistencia" method="post" class="attendance-buttons d-inline-flex gap-1">
+                                            <input type="hidden" name="idPaciente" value="@p.IdPaciente" />
+                                            <input type="hidden" name="fecha" value="@Model.Fecha.ToString("yyyy-MM-dd")" />
+                                            
+                                            <button type="submit" name="presente" value="1"
+                                                    class="btn btn-sm px-3 rounded-pill @(p.Presente == true ? "btn-success" : "btn-outline-success")">
+                                                Sí
+                                            </button>
+                                            
+                                            <button type="submit" name="presente" value="0"
+                                                    class="btn btn-sm px-3 rounded-pill @(p.Presente == false ? "btn-danger" : "btn-outline-danger")">
+                                                No
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card dashboard-card h-100">
+                <div class="card-header">
+                    <h2 class="card-title m-0">
+                        Cobros de @Model.Fecha.ToString("MMMM yyyy", ar)
+                    </h2>
+                </div>
+                <div class="card-body p-0 d-flex flex-column justify-content-between">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th class="ps-3">Alumno</th>
+                                    <th>Concepto</th>
+                                    <th class="text-end pe-3">Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @if (Model.Cobros.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="3" class="py-4 text-center text-muted">No hay cobros para mostrar.</td>
+                                </tr>
+                            }
+                            @foreach (var c in Model.Cobros)
+                            {
+                                <tr>
+                                    <td class="ps-3">@c.Nombre</td>
+                                    <td>@c.Concepto</td>
+                                    <td class="text-end pe-3 font-monospace">$ @c.Monto.ToString("N0", ar)</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="payment-total mt-auto">
+                        <div class="d-flex justify-content-between align-items-center fw-bold fs-5 px-1">
+                            <span>Total</span>
+                            <span class="total-amount">$ @Model.Total.ToString("N0", ar)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

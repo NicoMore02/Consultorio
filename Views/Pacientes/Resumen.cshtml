@@ -1,0 +1,82 @@
+@model ViewModels.ResumenMensualViewModel
+@using System.Globalization
+@{
+    ViewData["Title"] = "Resumen mensual";
+    var ar = CultureInfo.GetCultureInfo("es-AR");
+}
+
+<div class="summary-page py-3">
+    <div class="page-heading">
+        <div>
+            <h1>Resumen de meses anteriores</h1>
+            <p class="text-muted mb-0">Totales mensuales anteriores a @DateTime.Today.ToString("MMMM yyyy", ar).</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-custom-teal">Volver a pacientes</a>
+    </div>
+
+    <div class="alert summary-note" role="note">
+        El resumen usa los pacientes y aranceles actuales, junto con las asistencias registradas.
+        Solo se muestran meses que tengan registros de asistencia.
+    </div>
+
+    <div class="card summary-total-card mb-4">
+        <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span class="summary-total-label">Total acumulado de meses anteriores</span>
+            <span class="summary-total-amount">$ @Model.TotalAcumulado.ToString("N0", ar)</span>
+        </div>
+    </div>
+
+    @if (Model.Meses.Count == 0)
+    {
+        <div class="card selection-card">
+            <div class="card-body py-4 text-center text-muted">
+                Todavía no hay asistencias registradas en meses anteriores.
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+        @foreach (var mes in Model.Meses)
+        {
+            <div class="col-12">
+                <section class="card dashboard-card summary-month-card">
+                    <div class="card-header d-flex justify-content-between align-items-center gap-3">
+                        <h2 class="card-title text-capitalize m-0">@mes.Mes.ToString("MMMM yyyy", ar)</h2>
+                        <span class="summary-month-total">$ @mes.Total.ToString("N0", ar)</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-3">Paciente</th>
+                                        <th>Concepto</th>
+                                        <th class="text-end pe-3">Monto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @if (mes.Cobros.Count == 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="py-3 text-center text-muted">No hay cobros para mostrar.</td>
+                                    </tr>
+                                }
+                                @foreach (var cobro in mes.Cobros)
+                                {
+                                    <tr>
+                                        <td class="ps-3">@cobro.Nombre</td>
+                                        <td>@cobro.Concepto</td>
+                                        <td class="text-end pe-3">$ @cobro.Monto.ToString("N0", ar)</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        }
+        </div>
+    }
+</div>

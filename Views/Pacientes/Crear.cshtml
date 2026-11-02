@@ -1,0 +1,173 @@
+@model ViewModels.PacienteViewModel
+@using Models
+@using System.Globalization
+@{
+    ViewData["Title"] ??= "Agregar paciente";
+    var titulo = ViewData["Title"]?.ToString() ?? "Agregar paciente";
+    var formAction = ViewData["FormAction"]?.ToString() ?? "Crear";
+    var submitText = ViewData["SubmitText"]?.ToString() ?? "Guardar paciente";
+    var cultura = CultureInfo.GetCultureInfo("es-AR");
+    var dias = Enum.GetValues<DayOfWeek>();
+}
+
+<div class="form-page py-3">
+    <div class="page-heading">
+        <h1>@titulo</h1>
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver a pacientes</a>
+    </div>
+
+    <form asp-action="@formAction" asp-route-id="@(Model.IdPaciente > 0 ? Model.IdPaciente.ToString() : null)" method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="card form-card">
+            <div class="card-header bg-white fw-bold">Datos del paciente</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Modalidad" class="form-label"></label>
+                        <select asp-for="Modalidad" class="form-select">
+                            <option value="@((int)ModalidadDePago.PorSession)">Por sesión</option>
+                            <option value="@((int)ModalidadDePago.Mensual)">Mensual</option>
+                        </select>
+                        <span asp-validation-for="Modalidad" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="MontoBase" class="form-label"></label>
+                        <input asp-for="MontoBase" type="number" min="0" step="0.01" class="form-control" />
+                        <span asp-validation-for="MontoBase" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input asp-for="Plus" class="form-check-input" />
+                            <label asp-for="Plus" class="form-check-label"></label>
+                        </div>
+                        <div class="form-check">
+                            <input asp-for="ObraSocial" class="form-check-input" />
+                            <label asp-for="ObraSocial" class="form-check-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="MontoPlus" class="form-label"></label>
+                        <input asp-for="MontoPlus" type="number" min="0" step="0.01" class="form-control" />
+                        <span asp-validation-for="MontoPlus" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card form-card">
+            <div class="card-header bg-white d-flex align-items-center justify-content-between">
+                <span class="fw-bold">Días y horarios</span>
+                <button type="button" id="addSchedule" class="btn btn-sm btn-outline-primary">
+                    Agregar otro horario
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="scheduleList">
+                    @for (var i = 0; i < Model.Horarios.Count; i++)
+                    {
+                        <div class="schedule-row row g-2 align-items-end mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label" for="Horarios_@(i)__DiaSemana">Día</label>
+                                <select id="Horarios_@(i)__DiaSemana" name="Horarios[@i].DiaSemana" class="form-select">
+                                    @foreach (var dia in dias)
+                                    {
+                                        <option value="@((int)dia)" selected="@(Model.Horarios[i].DiaSemana == dia)">
+                                            @cultura.DateTimeFormat.GetDayName(dia)
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="Horarios_@(i)__HoraInicio">Desde</label>
+                                <input id="Horarios_@(i)__HoraInicio" name="Horarios[@i].HoraInicio" type="time"
+                                       value="@Model.Horarios[i].HoraInicio.ToString(@"hh\:mm")" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="Horarios_@(i)__HoraFin">Hasta</label>
+                                <input id="Horarios_@(i)__HoraFin" name="Horarios[@i].HoraFin" type="time"
+                                       value="@Model.Horarios[i].HoraFin.ToString(@"hh\:mm")" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-danger remove-schedule">Quitar</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="Horarios" class="text-danger"></span>
+                <p class="form-text mb-0">No se permiten horarios que se superpongan con los de otros pacientes.</p>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">@submitText</button>
+        <a asp-action="Index" class="btn btn-outline-secondary ms-2">Cancelar</a>
+    </form>
+</div>
+
+<template id="scheduleTemplate">
+    <div class="schedule-row row g-2 align-items-end mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Día</label>
+            <select class="form-select" data-field="DiaSemana">
+                @foreach (var dia in dias)
+                {
+                    <option value="@((int)dia)">@cultura.DateTimeFormat.GetDayName(dia)</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Desde</label>
+            <input type="time" value="09:00" class="form-control" data-field="HoraInicio" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Hasta</label>
+            <input type="time" value="10:00" class="form-control" data-field="HoraFin" />
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-outline-danger remove-schedule">Quitar</button>
+        </div>
+    </div>
+</template>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const scheduleList = document.getElementById("scheduleList");
+        const scheduleTemplate = document.getElementById("scheduleTemplate");
+
+        function renumberSchedules() {
+            scheduleList.querySelectorAll(".schedule-row").forEach((row, index) => {
+                row.querySelectorAll("[name], [data-field]").forEach((field) => {
+                    const property = field.dataset.field ??
+                        field.name.match(/Horarios\[\d+\]\.(.+)/)[1];
+                    field.name = `Horarios[${index}].${property}`;
+                    field.id = `Horarios_${index}__${property}`;
+                });
+                row.querySelectorAll("label[for]").forEach((label) => {
+                    const property = label.htmlFor.match(/__([A-Za-z]+)$/)?.[1];
+                    if (property) {
+                        label.htmlFor = `Horarios_${index}__${property}`;
+                    }
+                });
+            });
+        }
+
+        document.getElementById("addSchedule").addEventListener("click", () => {
+            scheduleList.append(scheduleTemplate.content.cloneNode(true));
+            renumberSchedules();
+        });
+
+        scheduleList.addEventListener("click", (event) => {
+            if (event.target.classList.contains("remove-schedule")) {
+                event.target.closest(".schedule-row").remove();
+                renumberSchedules();
+            }
+        });
+    </script>
+}

@@ -1,0 +1,46 @@
+@model List<Models.Paciente>
+@{
+    ViewData["Title"] = "Actualizar paciente";
+}
+
+<div class="selection-page py-3">
+    <div class="page-heading">
+        <h1>Elegí un paciente para actualizar</h1>
+        <p class="text-muted mb-0">Seleccioná un paciente para modificar sus datos y horarios.</p>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">Todavía no hay pacientes registrados.</div>
+    }
+    else
+    {
+        <div class="card selection-card">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Paciente</th>
+                            <th>Modalidad</th>
+                            <th class="text-end pe-3">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var paciente in Model)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-semibold">@paciente.nombre</td>
+                            <td>@(paciente.por_o_mensual == Models.ModalidadDePago.Mensual ? "Mensual" : "Por sesión")</td>
+                            <td class="text-end pe-3">
+                                <a asp-action="Actualizar" asp-route-id="@paciente.idPaciente" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil-square me-1"></i>Elegir
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

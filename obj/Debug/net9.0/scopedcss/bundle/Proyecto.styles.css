@@ -1,0 +1,105 @@
+/* _content/Proyecto/Views/Shared/_Layout.cshtml.rz.scp.css */
+/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+/* Fondo general beige cálido */
+body.floral-theme[b-llr71ombjl] {
+    background-color: #F8F5EE;
+    color: #4A4A4A;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header con adorno de flores en la esquina superior derecha */
+.floral-header[b-llr71ombjl] {
+    background-color: transparent;
+    background-image: url('/images/flores_header.jpg'); /* Guardá la ilustración de flores con fondo transparente */
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: contain;
+    padding-top: 10px;
+}
+
+/* Botones con paleta suave pastel */
+.btn-custom-blue[b-llr71ombjl] {
+    background-color: #6C9BC3;
+    color: #FFFFFF;
+    border: none;
+}
+.btn-custom-blue:hover[b-llr71ombjl] {
+    background-color: #5B88B0;
+    color: #FFFFFF;
+}
+
+.btn-custom-teal[b-llr71ombjl] {
+    background-color: #8EB8B5;
+    color: #FFFFFF;
+    border: none;
+}
+.btn-custom-teal:hover[b-llr71ombjl] {
+    background-color: #7AA5A2;
+    color: #FFFFFF;
+}
+
+.btn-outline-custom-teal[b-llr71ombjl] {
+    border: 1px solid #B4C5C0;
+    color: #6A827B;
+    background-color: transparent;
+}
+.btn-outline-custom-teal:hover[b-llr71ombjl] {
+    background-color: #E2EBE8;
+    color: #556B65;
+}
+
+.btn-outline-custom-pink[b-llr71ombjl] {
+    border: 1px solid #E4C0BE;
+    color: #C07977;
+    background-color: transparent;
+}
+.btn-outline-custom-pink:hover[b-llr71ombjl] {
+    background-color: #F8ECEB;
+    color: #A85E5C;
+}
+
+/* Tarjetas redondeadas con sombra suave */
+.card[b-llr71ombjl] {
+    background-color: #FAF8F5;
+    border: 1px solid #EFEAE1 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03) !important;
+}
+
+.card-header[b-llr71ombjl] {
+    background-color: transparent !important;
+    border-bottom: 1px solid #EFEAE1 !important;
+}
+
+/* Botones de asistencia Sí / No */
+.btn-asistencia-si[b-llr71ombjl] {
+    background-color: #8EB8B5;
+    color: white;
+    border-radius: 20px;
+}
+
+.btn-asistencia-no[b-llr71ombjl] {
+    background-color: #DB7B75;
+    color: white;
+    border-radius: 20px;
+}
+
+/* Tablas */
+.table[b-llr71ombjl] {
+    --bs-table-bg: transparent;
+}
+.table-light[b-llr71ombjl] {
+    --bs-table-bg: #F3EEE6;
+}
+
+/* Footer */
+.footer[b-llr71ombjl] {
+    margin-top: auto;
+    background-color: transparent;
+    border-top: none !important;
+}

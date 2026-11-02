@@ -1,0 +1,40 @@
+@model ViewModels.AccesoViewModel
+@{
+    ViewData["Title"] = "Acceso";
+}
+
+<div class="access-page">
+    <section class="card access-card">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <span class="access-icon"><i class="bi bi-lock"></i></span>
+                <h1 class="h3 mt-3 mb-2">Acceso al consultorio</h1>
+                <p class="text-muted mb-0">Ingresá la contraseña para continuar.</p>
+            </div>
+
+            @if (ViewData["AccessConfigured"] is false)
+            {
+                <div class="alert alert-warning">
+                    La contraseña todavía no está configurada. En la terminal del proyecto ejecutá:<br />
+                    <code>dotnet user-secrets set "AppAccess:Password" "TU_CONTRASEÑA"</code>
+                    <br />Después reiniciá la aplicación.
+                </div>
+            }
+
+            <form asp-action="Login" method="post">
+                <input asp-for="ReturnUrl" type="hidden" />
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control form-control-lg" autocomplete="current-password" autofocus />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-custom-blue w-100 btn-lg">Ingresar</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

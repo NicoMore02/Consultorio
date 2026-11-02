@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Proyecto</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="floral-theme">
+    <header class="floral-header">
+        <nav class="navbar navbar-expand-md navbar-light bg-transparent container-fluid px-4 py-3">
+            <a class="navbar-brand text-dark fw-normal me-4" asp-area="" asp-controller="Home" asp-action="Index">Consultorio</a>
+            @if (ViewData["HideNavigation"] is not true)
+            {
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 gap-2">
+                        <li class="nav-item">
+                            <a asp-controller="Pacientes" asp-action="Index" class="btn btn-custom-blue rounded-pill px-3 py-1">
+                                Pacientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Pacientes" asp-action="Crear" class="btn btn-custom-teal rounded-pill px-3 py-1">
+                                Agregar paciente
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Pacientes" asp-action="Actualizar" class="btn btn-outline-custom-teal rounded-pill px-3 py-1">
+                                Actualizar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Pacientes" asp-action="Eliminar" class="btn btn-outline-custom-pink rounded-pill px-3 py-1">
+                                Eliminar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Pacientes" asp-action="Resumen" class="btn btn-outline-custom-teal rounded-pill px-3 py-1">
+                                Resumen
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer text-muted py-3">
+        <div class="container text-muted">
+            &copy; 2026 - Consultorio - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-muted text-decoration-underline">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
